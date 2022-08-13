@@ -3,6 +3,11 @@ import org.junit.jupiter.api.Test;
 
 public class MoviePosterManagerTest {
 
+    MoviePosterRepository repo = new MoviePosterRepository();
+    MoviePosterManager poster = new MoviePosterManager(repo);
+
+
+
     MoviePoster item1 = new MoviePoster(1, "https://", "Бладшот", "боевик");
     MoviePoster item2 = new MoviePoster(2, "https://", "Вперед", "мультфильм");
     MoviePoster item3 = new MoviePoster(3, "https://", "Отель", "комедия");
@@ -16,11 +21,10 @@ public class MoviePosterManagerTest {
     MoviePoster item11 = new MoviePoster(11, "https://", "Китай", "документальный");
     @Test
     public void shouldSave() {
-        MoviePosterManager poster = new MoviePosterManager();
-        poster.save(item1);
-        poster.save(item2);
-        poster.save(item3);
-        poster.save(item4);
+        poster.add(item1);
+        poster.add(item2);
+        poster.add(item3);
+        poster.add(item4);
 
         MoviePoster[] expected = {item1, item2, item3, item4};
         MoviePoster[] actual = poster.findAll();
@@ -30,9 +34,8 @@ public class MoviePosterManagerTest {
 
     @Test
     public void ShouldGetAll() {
-        MoviePosterManager poster = new MoviePosterManager();
-        poster.save(item1);
-        poster.save(item2);
+        poster.add(item1);
+        poster.add(item2);
 
         MoviePoster[] expected = {item1, item2};
         MoviePoster[] actual = poster.findAll();
@@ -43,10 +46,9 @@ public class MoviePosterManagerTest {
 
     @Test
     public void ShouldGetLastDef() {
-        MoviePosterManager poster = new MoviePosterManager();
-        poster.save(item1);
-        poster.save(item2);
-        poster.save(item3);
+        poster.add(item1);
+        poster.add(item2);
+        poster.add(item3);
 
         MoviePoster[] expected = {item3, item2, item1};
         MoviePoster[] actual = poster.findLastDef();
@@ -56,18 +58,17 @@ public class MoviePosterManagerTest {
 
     @Test
     public void ShouldGetLastDefIfMoviesMoreThanTen() {
-        MoviePosterManager poster = new MoviePosterManager();
-        poster.save(item1);
-        poster.save(item2);
-        poster.save(item3);
-        poster.save(item4);
-        poster.save(item5);
-        poster.save(item6);
-        poster.save(item7);
-        poster.save(item8);
-        poster.save(item9);
-        poster.save(item10);
-        poster.save(item11);
+        poster.add(item1);
+        poster.add(item2);
+        poster.add(item3);
+        poster.add(item4);
+        poster.add(item5);
+        poster.add(item6);
+        poster.add(item7);
+        poster.add(item8);
+        poster.add(item9);
+        poster.add(item10);
+        poster.add(item11);
 
         MoviePoster[] expected = {item11, item10, item9, item8, item7, item6, item5, item4, item3, item2};
         MoviePoster[] actual = poster.findLastDef();
@@ -77,10 +78,9 @@ public class MoviePosterManagerTest {
 
     @Test
     public void ShouldGetLastIfMoviesLessThanNum() {
-        MoviePosterManager poster = new MoviePosterManager();
-        poster.save(item1);
-        poster.save(item2);
-        poster.save(item3);
+        poster.add(item1);
+        poster.add(item2);
+        poster.add(item3);
 
         MoviePoster[] expected = {item3, item2, item1};
         MoviePoster[] actual = poster.findLast(5);
@@ -90,13 +90,63 @@ public class MoviePosterManagerTest {
 
     @Test
     public void ShouldGetLastIfMoviesMoreThanNum() {
-        MoviePosterManager poster = new MoviePosterManager();
-        poster.save(item1);
-        poster.save(item2);
-        poster.save(item3);
+        poster.add(item1);
+        poster.add(item2);
+        poster.add(item3);
 
         MoviePoster[] expected = {item3, item2};
         MoviePoster[] actual = poster.findLast(2);
+
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void ShouldFindByIdIfExists() {
+        poster.add(item1);
+        poster.add(item2);
+        poster.add(item3);
+
+        MoviePoster expected = item2;
+        MoviePoster actual = repo.findById(2);
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void ShouldFindByIdIfNotExists() {
+        poster.add(item1);
+        poster.add(item2);
+
+        MoviePoster expected = null;
+        MoviePoster actual = repo.findById(3);
+
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void ShouldRemoveById() {
+        poster.add(item1);
+        poster.add(item2);
+        poster.add(item3);
+
+        repo.removeById(2);
+
+        MoviePoster[] expected = {item1, item3};
+        MoviePoster[] actual = poster.findAll();
+
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void ShouldRemoveAll() {
+        poster.add(item1);
+        poster.add(item2);
+        poster.add(item3);
+
+        repo.removeAll();
+
+        MoviePoster[] expected = {};
+        MoviePoster[] actual = poster.findAll();
 
         Assertions.assertArrayEquals(expected, actual);
     }

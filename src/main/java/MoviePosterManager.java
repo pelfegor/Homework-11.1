@@ -1,27 +1,27 @@
 public class MoviePosterManager {
 
-    private MoviePoster[] items = new MoviePoster[0];
+    private MoviePosterRepository repo;
 
-    public void save(MoviePoster item) {
-        MoviePoster[] tmp = new MoviePoster[items.length +1];
-        for (int i = 0; i < items.length; i++) {
-            tmp[i] = items[i];
-        }
-        tmp[tmp.length -1] = item;
-        items = tmp;
+    public MoviePosterManager(MoviePosterRepository repo) {
+        this.repo = repo;
     }
 
+    public void add(MoviePoster item) {
+        repo.save(item);
+    }
+
+
     public MoviePoster[] findAll() {
-        return items;
+        return repo.findAll();
     }
 
     public MoviePoster[] findLastDef() {
-        MoviePoster[] all = items;
+        MoviePoster[] all = repo.findAll();
         int resultLength;
-        if (items.length > 10) {
+        if (all.length > 10) {
             resultLength = 10;
         } else {
-            resultLength = items.length;
+            resultLength = all.length;
         }
         MoviePoster[] last = new MoviePoster[resultLength];
         for (int i = 0; i < last.length; i++) {
@@ -31,10 +31,10 @@ public class MoviePosterManager {
     }
 
     public MoviePoster[] findLast(int num) {
-        MoviePoster[] all = items;
+        MoviePoster[] all = repo.findAll();
         int resultLength;
-        if (items.length < num) {
-            resultLength = items.length;
+        if (all.length < num) {
+            resultLength = all.length;
         } else {
             resultLength = num;
         }
