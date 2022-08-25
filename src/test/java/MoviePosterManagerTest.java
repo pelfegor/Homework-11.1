@@ -49,7 +49,7 @@ public class MoviePosterManagerTest {
         poster.save(item3);
 
         MoviePoster[] expected = {item3, item2, item1};
-        MoviePoster[] actual = poster.findLastDef();
+        MoviePoster[] actual = poster.findLast();
 
         Assertions.assertArrayEquals(expected, actual);
     }
@@ -70,33 +70,33 @@ public class MoviePosterManagerTest {
         poster.save(item11);
 
         MoviePoster[] expected = {item11, item10, item9, item8, item7, item6, item5, item4, item3, item2};
-        MoviePoster[] actual = poster.findLastDef();
+        MoviePoster[] actual = poster.findLast();
 
         Assertions.assertArrayEquals(expected, actual);
     }
 
     @Test
-    public void ShouldGetLastIfMoviesLessThanNum() {
-        MoviePosterManager poster = new MoviePosterManager();
+    public void ShouldGetLastIfMoviesLessThanLimit() {
+        MoviePosterManager poster = new MoviePosterManager(4);
         poster.save(item1);
         poster.save(item2);
         poster.save(item3);
 
         MoviePoster[] expected = {item3, item2, item1};
-        MoviePoster[] actual = poster.findLast(5);
+        MoviePoster[] actual = poster.findLast();
 
         Assertions.assertArrayEquals(expected, actual);
     }
 
     @Test
-    public void ShouldGetLastIfMoviesMoreThanNum() {
-        MoviePosterManager poster = new MoviePosterManager();
+    public void ShouldGetLastIfMoviesMoreThanLimit() {
+        MoviePosterManager poster = new MoviePosterManager(2);
         poster.save(item1);
         poster.save(item2);
         poster.save(item3);
 
         MoviePoster[] expected = {item3, item2};
-        MoviePoster[] actual = poster.findLast(2);
+        MoviePoster[] actual = poster.findLast();
 
         Assertions.assertArrayEquals(expected, actual);
     }

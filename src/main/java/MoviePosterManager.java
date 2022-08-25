@@ -2,6 +2,16 @@ public class MoviePosterManager {
 
     private MoviePoster[] items = new MoviePoster[0];
 
+    private int limit;
+
+    public MoviePosterManager() {
+        limit = 10;
+    }
+
+    public MoviePosterManager(int limit) {
+        this.limit = limit;
+    }
+
     public void save(MoviePoster item) {
         MoviePoster[] tmp = new MoviePoster[items.length +1];
         for (int i = 0; i < items.length; i++) {
@@ -15,35 +25,12 @@ public class MoviePosterManager {
         return items;
     }
 
-    public MoviePoster[] findLastDef() {
-        MoviePoster[] all = items;
-        int resultLength;
-        if (items.length > 10) {
-            resultLength = 10;
-        } else {
-            resultLength = items.length;
-        }
-        MoviePoster[] last = new MoviePoster[resultLength];
-        for (int i = 0; i < last.length; i++) {
-            last[i] = all[all.length - 1 - i];
-        }
-        return last;
-    }
-
-    public MoviePoster[] findLast(int num) {
-        MoviePoster[] all = items;
-        int resultLength;
-        if (items.length < num) {
-            resultLength = items.length;
-        } else {
-            resultLength = num;
-        }
-        MoviePoster[] last = new MoviePoster[resultLength];
+    public MoviePoster[] findLast() {
+        int resultLength = limit < items.length ? limit : items.length;
+        MoviePoster[] result = new MoviePoster[resultLength];
         for (int i = 0; i < resultLength; i++) {
-            last[i] = all[all.length - 1 - i];
+            result[i] = items[items.length - 1 - i];
         }
-        return last;
+        return result;
     }
-
-
 }
